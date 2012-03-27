@@ -8,18 +8,26 @@ import time
 import serial
 from BeautifulSoup import BeautifulSoup
 
-status = 'PN'
+status = 'N'
 
 page = urllib2.urlopen("https://www.google.com/")
 soup = BeautifulSoup(page)
 
-status = soup.find(text = re.compile('Gogle'))
-print status
+result = soup.find(text = re.compile('Gogle'))
+
+if result == 'Google':
+	status = 'Y'
+else:
+	status = 'N'
 
 ser = serial.Serial('COM3')
-if status == 'PN':
-	ser.write("m")
-else:
+if status == 'Y':
 	ser.write("n")
+else:
+	ser.write("m")
+
+print status
+print result
+	
 ser.close()
 
