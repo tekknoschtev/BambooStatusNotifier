@@ -1,1 +1,35 @@
 BAMBOO STATUS NOTIFIER
+==============================
+The Bamboo Status Notifier is designed to provide an entertaining and easy
+way to notify the team of the current status of the bamboo build.  Based on
+specified criteria, certain events can be triggered with the Arduino.  For
+example, when the build fails, a Red light could flash along with a negative
+sounding tone.
+
+FUNCTIONALITY
+==============================
+bamboobuildchecker.py --
+  The python script is scheduled to run every 10 seconds.  It fetches the
+  Bamboo log page for the SfS Test build, and parses the page looking for
+  specific strings of text.  The currently configured scenarios are:
+    - Successful build
+    - Failed build
+    - Currently building
+  Once the script detects one of the listed conditions, it writes a 
+  character to the specified serial port.
+
+bambooBuildChecker.ino --
+  The arduino script is running in a constant loop reading from the serial
+  port.  Once it reads one of the pre-defined characters, certain actions 
+  are triggered.  The currently actions are as follows:
+    - Successful build:
+        Turn on one LED
+    - Currently building
+        Flash a LED
+    - Build failed
+        Turn on a different LED and play a depressing tone
+
+SETUP
+==============================
+The only configuration change needed in order for this project to function
+on any host machine is the serial port; currently it's configured to COM3.
