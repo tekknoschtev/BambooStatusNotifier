@@ -1,11 +1,15 @@
+#include "pitches.h"
+
 int successPin = 8;
 int buildingPin = 9;
 int failPin = 10;
+int tonePin = 12;
 int val;
-int building = 0;
+boolean building = false;
 int buildingState = LOW;
 long previousMillis = 0;
 long interval = 1000;
+
 
 void setup()
 {
@@ -28,6 +32,7 @@ void loop()
     }
     else if (val == 109) {  //109 = m in dec
       building = 0;
+      
       fail(); 
     }
     else if (val == 108) { 
@@ -35,18 +40,18 @@ void loop()
       succeed();     
     }
     else {
-      
       building = 0;
-      allOff();           
+      allOff();
+      noTone(12);      
     } 
   }
   
   if(currentMillis - previousMillis > interval) {
     previousMillis = currentMillis;
     Serial.write(building);
-    if (building == 1) {
+    if (building) {
       if (buildingState == LOW) {
-        buildingState = HIGH;
+        buildingState = HIGH; 
       }
       else {
         buildingState = LOW;
@@ -57,12 +62,17 @@ void loop()
       building = 0;
     }      
   }
+  
 }
 
 void fail() {
   digitalWrite(buildingPin, LOW);
   digitalWrite(successPin, LOW);
-  digitalWrite(failPin, HIGH);   
+  digitalWrite(failPin, HIGH);
+  tone(tonePin, NOTE_C2, 1000);
+  delay(300);
+  tone(tonePin, NOTE_C1
+  , 1000);
 }
 
 void succeed() {
